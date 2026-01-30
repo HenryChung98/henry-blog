@@ -23,11 +23,11 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 						)
 					}
 				</div>
-				<hr />
 			</div>
-		<div class="disclaimer">
-  <strong>Note:</strong> This post is a personal learning note and may contain inaccuracies or misunderstandings.
-</div>
+			<div class="disclaimer">
+				<strong>Note:</strong> This post is a personal learning note and may contain inaccuracies or misunderstandings.
+			</div>
+			<hr />
 			<slot />
 		</div>
 	</article>
@@ -39,9 +39,9 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 	}
 	
 	.prose {
-		max-width: 720px;
+		max-width: 1020px;
 		margin: 0 auto;
-		color: rgb(var(--gray-dark));
+		color: var(--muted-foreground);
 	}
 	
 	.title {
@@ -54,7 +54,7 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 		margin-bottom: 0.5em;
 		text-align: left;
 		font-size: 1rem;
-		color: rgb(var(--gray));
+		color: var(--muted-foreground);
 	}
 	
 	.last-updated-on {
@@ -62,17 +62,17 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 	}
 
 	.disclaimer {
-		background-color: #fef3c7;
-		border-left: 4px solid #f59e0b;
+		background-color: oklch(0.35 0.12 65);
+		border-left: 4px solid oklch(0.65 0.16 65);
 		padding: 1rem 1.25rem;
 		margin-bottom: 2rem;
 		border-radius: 0.25rem;
-		color: #92400e;
+		color: oklch(0.95 0.05 65);
 		font-size: 0.9rem;
 		line-height: 1.5;
 	}
 
 	.disclaimer strong {
-		color: #78350f;
+		color: oklch(0.65 0.16 65);	
 	}
 </style>

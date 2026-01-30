@@ -13,7 +13,7 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
   <nav>
     <ul class="categories">
         <li>
-            <a href="/henry-blog/blog">All Posts</a>
+            <a href="/henry-blog/posts">All Posts</a>
         </li>   
       {categories.map((category) => (
         <li>
@@ -30,8 +30,7 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
     position: sticky;
     top: 6rem;
     height: fit-content;
-    width: 240px;
-    padding: 1.5rem;
+    margin-right: 2rem;
   }
 
   .avatar {
@@ -52,12 +51,12 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
 
   .categories a {
     font-size: 0.95rem;
-    color: var(--gray-dark);
+    color: var(--secondary-foreground);
     text-decoration: none;
   }
 
   .categories a:hover {
-    color: var(--accent);
+    color: var(--primary);
   }
 
   @media (max-width: 1024px) {
@@ -67,10 +66,11 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
       left: 0;
       height: 100vh;
       width: 250px;
-      background: white;
+      background: var(--card);
       z-index: 1000;
       padding: 2rem;
-      border-right: 1px solid rgb(var(--gray-light));
+      border-top: 1px solid var(--muted);
+      border-right: 1px solid var(--muted);
       box-shadow: 2px 0 8px rgba(0,0,0,0.1);
       transform: translateX(-100%);
       transition: transform 0.3s ease-in-out;
@@ -81,7 +81,6 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
       transform: translateX(0);
     }
 
-    /* Optional: Add overlay if needed via pseudo-element or separate div */
     :global(body.menu-open)::after {
       content: '';
       position: fixed;

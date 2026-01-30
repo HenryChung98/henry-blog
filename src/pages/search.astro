@@ -35,7 +35,7 @@ const searchData = sortedPosts.map(post => ({
 
 		<div id="no-results" class="no-results hidden">
 			<p>No posts found matching your search.</p>
-			<p class="suggestion">Try different keywords or <a href="/henry-blog/blog">browse all posts</a>.</p>
+			<p class="suggestion">Try different keywords or <a href="/henry-blog/posts">browse all posts</a>.</p>
 		</div>
 
 		<div id="results-info" class="results-info hidden"></div>
@@ -101,7 +101,7 @@ const searchData = sortedPosts.map(post => ({
 			if (resultsGrid) {
 				resultsGrid.innerHTML = results.map(post => `
 					<article class="post-card">
-						<a href="/henry-blog/blog/${post.id}">
+						<a href="/henry-blog/posts/${post.id}">
 							<h2 class="post-title">${highlightText(post.title, query)}</h2>
 							<p class="post-description">${highlightText(post.description, query)}</p>
 							<div class="post-meta">
@@ -137,19 +137,19 @@ const searchData = sortedPosts.map(post => ({
 
 	h1 {
 		margin-bottom: 1rem;
-		color: rgb(var(--black));
+		color: var(--primary);
 	}
 
 	.search-query {
 		font-size: 1.1rem;
-		color: rgb(var(--gray-dark));
+		color: var(--muted-foreground);
 		margin-bottom: 2rem;
 		padding-bottom: 1rem;
-		border-bottom: 2px solid rgb(var(--gray-light));
+		border-bottom: 2px solid var(--border);
 	}
 
 	.search-query :global(strong) {
-		color: var(--accent);
+		color: var(--primary);
 	}
 
 	/* 초기 상태를 위한 스타일 (스크립트 로드 전) */
@@ -159,14 +159,14 @@ const searchData = sortedPosts.map(post => ({
 
 	.results-info {
 		margin-bottom: 1.5rem;
-		color: rgb(var(--gray));
+		color: var(--muted-foreground);
 		font-size: 0.95rem;
 	}
 
 	.no-results {
 		text-align: center;
 		padding: 3rem 1rem;
-		color: rgb(var(--gray));
+		color: var(--muted-foreground);
 	}
 
 	.no-results p {
@@ -179,7 +179,7 @@ const searchData = sortedPosts.map(post => ({
 	}
 
 	.suggestion a {
-		color: var(--accent);
+		color: var(--primary);
 		text-decoration: none;
 	}
 
@@ -193,37 +193,37 @@ const searchData = sortedPosts.map(post => ({
 	}
 
 	.post-card {
-		background: white;
-		border: 1px solid rgb(var(--gray-light));
+		background: var(--card);
+		border: 1px solid var(--border);
 		border-radius: 12px;
 		padding: 1.5rem;
 		transition: all 0.2s ease;
 	}
 
 	.post-card:hover {
-		box-shadow: 0 4px 12px rgba(var(--gray), 0.15);
-		border-color: var(--accent);
+		border-color: var(--primary);
 	}
 
 	.post-card a {
 		text-decoration: none;
 		color: inherit;
+		display: block;
 	}
 
 	.post-title {
 		margin: 0 0 0.75rem 0;
-		color: rgb(var(--black));
+		color: var(--card-foreground);
 		font-size: 1.5rem;
 		transition: color 0.2s;
 	}
 
 	.post-card:hover .post-title {
-		color: var(--accent);
+		color: var(--primary);
 	}
 
 	.post-description {
 		margin: 0 0 1rem 0;
-		color: rgb(var(--gray-dark));
+		color: var(--muted-foreground);
 		line-height: 1.6;
 	}
 
@@ -233,7 +233,7 @@ const searchData = sortedPosts.map(post => ({
 		gap: 1rem;
 		flex-wrap: wrap;
 		font-size: 0.9rem;
-		color: rgb(var(--gray));
+		color: var(--muted-foreground);
 	}
 
 	.categories {
@@ -243,8 +243,8 @@ const searchData = sortedPosts.map(post => ({
 	}
 
 	.category {
-		background: rgb(var(--gray-light));
-		color: rgb(var(--gray-dark));
+		background: var(--muted);
+		color: var(--muted-foreground);
 		padding: 0.25rem 0.75rem;
 		border-radius: 12px;
 		font-size: 0.85rem;
@@ -252,7 +252,7 @@ const searchData = sortedPosts.map(post => ({
 
 	/* Search highlights style */
 	:global(mark) {
-		background-color: rgba(35, 55, 255, 0.2);
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent);
 		color: inherit;
 		padding: 0 0.2em;
 		border-radius: 3px;
@@ -268,3 +268,4 @@ const searchData = sortedPosts.map(post => ({
 		}
 	}
 </style>
+

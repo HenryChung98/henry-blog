@@ -1,5 +1,5 @@
 export const BLOG_INFO = {
-  title: "Henry's Blog",
+  title: "Henry Blog",
   description: "Welcome to my blog!",
   author: {
     name: "Henry Chung",

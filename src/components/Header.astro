@@ -51,8 +51,8 @@ import SearchBox from './SearchBox.astro';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background: var(--card);
+		box-shadow: 0 2px 8px rgba(var(--background), 5%);
 		position: sticky;
 		top: 0;
 		z-index: 50; 
@@ -76,13 +76,17 @@ import SearchBox from './SearchBox.astro';
 	}
 	nav a {
 		padding: 0.8em 0.5em;
-		color: var(--black);
+		color: var(--primary);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
+	nav a:hover {
+		color: var(--primary-foreground);
+		transition: color 0.3s ease;
+	}
 	nav a.active {
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		border-bottom-color: var(--primary);
 	}
 
 	.menu-toggle {
@@ -91,7 +95,7 @@ import SearchBox from './SearchBox.astro';
 		border: none;
 		cursor: pointer;
 		padding: 0.5rem;
-		color: var(--black);
+		color: var(--foreground);
 	}
 
 	.social-links,

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import RootLayout from '../../layouts/RootLayout.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
+import PostCard from '../../components/PostCard.astro';
 import { BLOG_INFO } from '../../consts';
 
 export async function getStaticPaths() {
@@ -35,22 +35,7 @@ const { posts } = Astro.props;
 		<div class="posts-grid">
 			{
 				posts.map((post) => (
-					<article class="post-card">
-						<a href={`/henry-blog/blog/${post.id}`}>
-							<h2 class="post-title">{post.data.title}</h2>
-							<p class="post-description">{post.data.description}</p>
-							<div class="post-meta">
-								<FormattedDate date={post.data.pubDate} />
-								{post.data.categories && (
-									<div class="categories">
-										{post.data.categories.map((category) => (
-											<span class="category">{category}</span>
-										))}
-									</div>
-								)}
-							</div>
-						</a>
-					</article>
+					<PostCard post={post} />
 				))
 			}
 		</div>
@@ -61,18 +46,9 @@ const { posts } = Astro.props;
 	.category-page {
 		width: 100%;
 	}
-
-	h1 {
-		margin-bottom: 0.5rem;
-		color: rgb(var(--black));
-	}
-	
-	h1 span {
-		color: var(--accent);
-	}
 	
 	.count {
-		color: rgb(var(--gray));
+		color: var(--muted-foreground);
 		margin-bottom: 2rem;
 		font-size: 0.95rem;
 	}
@@ -81,73 +57,5 @@ const { posts } = Astro.props;
 		display: grid;
 		gap: 1.5rem;
 	}
-
-	.post-card {
-		background: white;
-		border: 1px solid rgb(var(--gray-light));
-		border-radius: 12px;
-		padding: 1.5rem;
-		transition: all 0.2s ease;
-	}
-
-	.post-card:hover {
-		box-shadow: 0 4px 12px rgba(var(--gray), 0.15);
-		border-color: var(--accent);
-	}
-
-	.post-card a {
-		text-decoration: none;
-		color: inherit;
-		display: block;
-	}
-
-	.post-title {
-		margin: 0 0 0.75rem 0;
-		color: rgb(var(--black));
-		font-size: 1.5rem;
-		transition: color 0.2s;
-	}
-
-	.post-card:hover .post-title {
-		color: var(--accent);
-	}
-
-	.post-description {
-		margin: 0 0 1rem 0;
-		color: rgb(var(--gray-dark));
-		line-height: 1.6;
-	}
-
-	.post-meta {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		flex-wrap: wrap;
-		font-size: 0.9rem;
-		color: rgb(var(--gray));
-	}
-
-	.categories {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
-
-	.category {
-		background: rgb(var(--gray-light));
-		color: rgb(var(--gray-dark));
-		padding: 0.25rem 0.75rem;
-		border-radius: 12px;
-		font-size: 0.85rem;
-	}
-
-	@media (max-width: 768px) {
-		.post-card {
-			padding: 1rem;
-		}
-
-		.post-title {
-			font-size: 1.25rem;
-		}
-	}
 </style>
+
