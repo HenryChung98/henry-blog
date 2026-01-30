@@ -1,0 +1,51 @@
+---
+import RootLayout from '../layouts/RootLayout.astro';
+---
+
+<RootLayout 
+  title="404 - Page Not Found" 
+  description="The page you're looking for doesn't exist"
+>
+  <div class="not-found">
+    <h1>404</h1>
+    <p>Page not found</p>
+    <a href="/henry-blog">Go back home</a>
+  </div>
+</RootLayout>
+
+<style>
+  .not-found {
+    text-align: center;
+    padding: 4rem 1rem;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 6rem;
+    margin: 0;
+    color: rgb(var(--accent));
+  }
+
+  p {
+    font-size: 1.5rem;
+    color: rgb(var(--gray-dark));
+    margin: 1rem 0 2rem;
+  }
+
+  a {
+    background: rgb(var(--accent));
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+</style>

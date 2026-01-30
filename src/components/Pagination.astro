@@ -1,0 +1,134 @@
+---
+import type { Page } from 'astro';
+
+interface Props {
+	page: Page<any>;
+}
+
+const { page } = Astro.props;
+
+const VISIBLE_PAGES = 5;
+const startPage = Math.max(1, Math.min(page.currentPage - Math.floor(VISIBLE_PAGES / 2), page.lastPage - VISIBLE_PAGES + 1));
+const endPage = Math.min(page.lastPage, startPage + VISIBLE_PAGES - 1);
+const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+// Helper to generate URLs for specific page numbers
+const cleanPath = (path: string) => path.replace(/\/$/, '');
+const currentPath = cleanPath(Astro.url.pathname);
+const basePath = page.currentPage === 1 
+    ? currentPath 
+    : currentPath.replace(new RegExp(`/${page.currentPage}$`), '');
+
+function getPageUrl(p: number) {
+    if (p === page.currentPage) return Astro.url.pathname;
+    if (p === page.currentPage - 1 && page.url.prev) return page.url.prev;
+    if (p === page.currentPage + 1 && page.url.next) return page.url.next;
+    return p === 1 ? (basePath || '/') : `${basePath}/${p}`;
+}
+---
+
+<nav class="pagination" aria-label="Pagination">
+	{
+		page.url.prev ? (
+			<a href={`/henry-blog/${page.url.prev}`} class="nav-btn prev">
+				&larr;
+			</a>
+		) : (
+			<span class="nav-btn disabled">&larr;</span>
+		)
+	}
+	
+	<div class="page-numbers">
+		{
+			pageNumbers.map((num) => (
+				<a 
+					href={`/henry-blog/${getPageUrl(num)}`} 
+					class:list={['page-btn', { active: num === page.currentPage }]}
+				>
+					{num}
+				</a>
+			))
+		}
+	</div>
+
+	{
+		page.url.next ? (
+			<a href={`/henry-blog/${page.url.next}`} class="nav-btn next">
+				&rarr;
+			</a>
+		) : (
+			<span class="nav-btn disabled">&rarr;</span>
+		)
+	}
+</nav>
+
+<style>
+	.pagination {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 3rem;
+		padding-top: 2rem;
+		border-top: 1px solid rgb(var(--gray-light));
+	}
+
+	.nav-btn,
+	.page-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2.5rem;
+		height: 2.5rem;
+		padding: 0 0.5rem;
+		border-radius: 8px;
+		background: white;
+		border: 1px solid rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+		transition: all 0.2s ease;
+		font-weight: 500;
+	}
+
+	.nav-btn:hover:not(.disabled),
+	.page-btn:hover:not(.active) {
+		border-color: var(--accent);
+		color: var(--accent);
+		background: rgb(var(--gray-light));
+	}
+
+	.page-btn.active {
+		background: var(--accent);
+		color: white;
+		border-color: var(--accent);
+	}
+
+	.disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		background: rgb(var(--gray-light));
+		border-color: transparent;
+	}
+
+	.page-numbers {
+		display: flex;
+		gap: 0.5rem;
+	}
+	
+	@media (max-width: 640px) {
+		.pagination {
+			gap: 0.25rem;
+		}
+		
+		.nav-btn, 
+		.page-btn {
+			min-width: 2rem;
+			height: 2rem;
+			font-size: 0.9rem;
+		}
+		
+		.page-numbers {
+			gap: 0.25rem;
+		}
+	}
+</style>

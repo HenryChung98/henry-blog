@@ -1,6 +1,6 @@
 ---
-title: 'First post'
-description: 'Lorem ipsum dolor sit amet'
+title: 'First posts'
+description: 'Lorem ipsum dolor sit amets'
 pubDate: 'Jul 08 2022'
 categories: ['Web Development']
 ---

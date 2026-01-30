@@ -1,0 +1,270 @@
+---
+import { getCollection } from 'astro:content';
+import RootLayout from '../layouts/RootLayout.astro';
+import { BLOG_INFO } from '../consts';
+
+// Fetch all posts at build time
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Prepare data for client-side usage
+const searchData = sortedPosts.map(post => ({
+	id: post.id,
+	title: post.data.title,
+	description: post.data.description,
+	pubDate: post.data.pubDate,
+	formattedDate: post.data.pubDate.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	}),
+	categories: post.data.categories || []
+}));
+---
+
+<RootLayout 
+	title={`Search Results - ${BLOG_INFO.title}`} 
+	description="Search results"
+>
+	<div class="search-page">
+		<div class="search-query" id="search-query-display">
+			Loading...
+		</div>
+
+		<div id="loading-indicator">Searching...</div>
+
+		<div id="no-results" class="no-results hidden">
+			<p>No posts found matching your search.</p>
+			<p class="suggestion">Try different keywords or <a href="/henry-blog/blog">browse all posts</a>.</p>
+		</div>
+
+		<div id="results-info" class="results-info hidden"></div>
+
+		<div class="results-grid" id="results-grid">
+			<!-- Results will be injected here by JavaScript -->
+		</div>
+	</div>
+</RootLayout>
+
+<script define:vars={{ searchData }}>
+	function initSearchPage() {
+		const urlParams = new URLSearchParams(window.location.search);
+		const query = urlParams.get('q') || '';
+		
+		const queryDisplay = document.getElementById('search-query-display');
+		const loadingIndicator = document.getElementById('loading-indicator');
+		const noResults = document.getElementById('no-results');
+		const resultsInfo = document.getElementById('results-info');
+		const resultsGrid = document.getElementById('results-grid');
+
+		// 1. 초기화: 검색어 표시
+		if (queryDisplay) {
+			queryDisplay.innerHTML = `Showing results for: <strong>"${query}"</strong>`;
+		}
+
+		// 2. 검색어가 없으면 초기 상태로 종료
+		if (!query.trim()) {
+			if (loadingIndicator) loadingIndicator.style.display = 'none';
+			if (noResults) noResults.style.display = 'block';
+			if (resultsInfo) resultsInfo.style.display = 'none';
+			if (resultsGrid) resultsGrid.innerHTML = '';
+			return;
+		}
+
+		// 3. 검색 실행
+		const lowerQuery = query.toLowerCase();
+		const results = searchData.filter(post => {
+			return (
+				post.title.toLowerCase().includes(lowerQuery) ||
+				post.description.toLowerCase().includes(lowerQuery) ||
+				(post.categories && post.categories.some(category => category.toLowerCase().includes(lowerQuery)))
+			);
+		});
+
+		// 4. 결과에 따른 UI 업데이트 (모든 상태를 명시적으로 설정)
+		if (loadingIndicator) loadingIndicator.style.display = 'none'; // 로딩 숨김
+
+		if (results.length === 0) {
+			// 결과 없음
+			if (noResults) noResults.style.display = 'block';
+			if (resultsInfo) resultsInfo.style.display = 'none';
+			if (resultsGrid) resultsGrid.innerHTML = '';
+		} else {
+			// 결과 있음
+			if (noResults) noResults.style.display = 'none';
+			
+			if (resultsInfo) {
+				resultsInfo.style.display = 'block';
+				resultsInfo.textContent = `Found ${results.length} ${results.length === 1 ? 'result' : 'results'}`;
+			}
+			
+			if (resultsGrid) {
+				resultsGrid.innerHTML = results.map(post => `
+					<article class="post-card">
+						<a href="/henry-blog/blog/${post.id}">
+							<h2 class="post-title">${highlightText(post.title, query)}</h2>
+							<p class="post-description">${highlightText(post.description, query)}</p>
+							<div class="post-meta">
+								<time datetime="${new Date(post.pubDate).toISOString()}">
+									${post.formattedDate}
+								</time>
+								${post.categories && post.categories.length > 0 ? `
+									<div class="categories">
+										${post.categories.map(category => `<span class="category">${category}</span>`).join('')}
+									</div>
+								` : ''}
+							</div>
+						</a>
+					</article>
+				`).join('');
+			}
+		}
+	}
+
+	function highlightText(text, query) {
+		const regex = new RegExp(`(${query})`, 'gi');
+		return text.replace(regex, '<mark>$1</mark>');
+	}
+
+	// 페이지 로드 시 실행
+	initSearchPage();
+</script>
+
+<style is:global>
+	.search-page {
+		width: 100%;
+	}
+
+	h1 {
+		margin-bottom: 1rem;
+		color: rgb(var(--black));
+	}
+
+	.search-query {
+		font-size: 1.1rem;
+		color: rgb(var(--gray-dark));
+		margin-bottom: 2rem;
+		padding-bottom: 1rem;
+		border-bottom: 2px solid rgb(var(--gray-light));
+	}
+
+	.search-query :global(strong) {
+		color: var(--accent);
+	}
+
+	/* 초기 상태를 위한 스타일 (스크립트 로드 전) */
+	.hidden {
+		display: none;
+	}
+
+	.results-info {
+		margin-bottom: 1.5rem;
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+
+	.no-results {
+		text-align: center;
+		padding: 3rem 1rem;
+		color: rgb(var(--gray));
+	}
+
+	.no-results p {
+		margin-bottom: 1rem;
+		font-size: 1.1rem;
+	}
+
+	.suggestion {
+		font-size: 0.95rem;
+	}
+
+	.suggestion a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.suggestion a:hover {
+		text-decoration: underline;
+	}
+
+	.results-grid {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.post-card {
+		background: white;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		padding: 1.5rem;
+		transition: all 0.2s ease;
+	}
+
+	.post-card:hover {
+		box-shadow: 0 4px 12px rgba(var(--gray), 0.15);
+		border-color: var(--accent);
+	}
+
+	.post-card a {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.post-title {
+		margin: 0 0 0.75rem 0;
+		color: rgb(var(--black));
+		font-size: 1.5rem;
+		transition: color 0.2s;
+	}
+
+	.post-card:hover .post-title {
+		color: var(--accent);
+	}
+
+	.post-description {
+		margin: 0 0 1rem 0;
+		color: rgb(var(--gray-dark));
+		line-height: 1.6;
+	}
+
+	.post-meta {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		font-size: 0.9rem;
+		color: rgb(var(--gray));
+	}
+
+	.categories {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.category {
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+		font-size: 0.85rem;
+	}
+
+	/* Search highlights style */
+	:global(mark) {
+		background-color: rgba(35, 55, 255, 0.2);
+		color: inherit;
+		padding: 0 0.2em;
+		border-radius: 3px;
+	}
+
+	@media (max-width: 768px) {
+		.post-card {
+			padding: 1rem;
+		}
+
+		.post-title {
+			font-size: 1.25rem;
+		}
+	}
+</style>

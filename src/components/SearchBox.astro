@@ -1,0 +1,274 @@
+---
+// Search component - client-side search functionality
+---
+
+<div class="search-container">
+	<input 
+		type="text" 
+		id="search-input"
+		placeholder="Search posts..." 
+		autocomplete="off"
+	/>
+	<div id="search-results" class="search-results hidden">
+		<div class="results-list"></div>
+	</div>
+</div>
+
+<script>
+	interface Post {
+		id: string;
+		title: string;
+		description: string;
+		pubDate: string;
+	}
+
+	// Use a function to initialize to avoid multiple executions
+	function initSearch() {
+		let allPosts: Post[] = [];
+		let searchTimeout: number;
+
+		// Fetch all posts on component mount
+		async function fetchPosts() {
+			try {
+				const response = await fetch('/api/search.json');
+				allPosts = await response.json();
+			} catch (error) {
+				console.error('Failed to fetch posts:', error);
+			}
+		}
+
+		function searchPosts(query: string): Post[] {
+			if (!query.trim()) return [];
+			
+			const lowerQuery = query.toLowerCase();
+			return allPosts.filter(post => 
+				post.title.toLowerCase().includes(lowerQuery) ||
+				post.description.toLowerCase().includes(lowerQuery)
+			);
+		}
+
+		function displayResults(results: Post[], query: string) {
+			const resultsContainer = document.querySelector('.results-list');
+			const searchResults = document.getElementById('search-results');
+			
+			if (!resultsContainer || !searchResults) return;
+
+			if (results.length === 0) {
+				resultsContainer.innerHTML = '<div class="no-results">No results found</div>';
+				searchResults.classList.remove('hidden');
+				return;
+			}
+
+			// Show max 6 results in dropdown
+			const displayResults = results.slice(0, 6);
+			const hasMore = results.length > 6;
+
+			resultsContainer.innerHTML = displayResults.map(post => `
+				<a href="/henry-blog/blog/${post.id}" class="result-item">
+					<div class="result-title">${highlightText(post.title, query)}</div>
+					<div class="result-description">${highlightText(post.description, query)}</div>
+				</a>
+			`).join('');
+
+			if (hasMore) {
+				resultsContainer.innerHTML += `
+					<div class="view-all">
+						Press Enter to view all ${results.length} results
+					</div>
+				`;
+			}
+
+			searchResults.classList.remove('hidden');
+		}
+
+		function highlightText(text: string, query: string): string {
+			const regex = new RegExp(`(${query})`, 'gi');
+			return text.replace(regex, '<mark>$1</mark>');
+		}
+
+		function hideResults() {
+			const searchResults = document.getElementById('search-results');
+			if (searchResults) {
+				searchResults.classList.add('hidden');
+			}
+		}
+
+		// Initialize
+		fetchPosts();
+
+		// Event listeners
+		const searchInput = document.getElementById('search-input') as HTMLInputElement;
+		
+		if (!searchInput) return;
+
+		// Input event
+		searchInput.addEventListener('input', (e) => {
+			const query = (e.target as HTMLInputElement).value;
+			
+			clearTimeout(searchTimeout);
+			
+			if (!query.trim()) {
+				hideResults();
+				return;
+			}
+
+			searchTimeout = window.setTimeout(() => {
+				const results = searchPosts(query);
+				displayResults(results, query);
+			}, 300);
+		});
+
+		// Enter key event
+		searchInput.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				const query = searchInput.value;
+				if (query && query.trim()) {
+					window.location.href = `/henry-blog/search?q=${encodeURIComponent(query.trim())}`;
+				}
+			}
+		});
+
+		// Close results when clicking outside
+		document.addEventListener('click', (e) => {
+			const target = e.target as Node;
+			const searchContainer = document.querySelector('.search-container');
+			if (searchContainer && !searchContainer.contains(target)) {
+				hideResults();
+			}
+		});
+
+		// Show results when focusing on input with existing value
+		searchInput.addEventListener('focus', () => {
+			const value = searchInput.value;
+			if (value && value.trim()) {
+				const results = searchPosts(value);
+				displayResults(results, value);
+			}
+		});
+	}
+
+	// Run initialization
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initSearch);
+	} else {
+		initSearch();
+	}
+</script>
+
+<style>
+	.search-container {
+		position: relative;
+		width: 100%;
+		max-width: 600px;
+		flex: 1; 
+		min-width: 200px; 
+	}
+
+	#search-input {
+		padding: 0.6em 1em;
+		border-radius: 12px;
+		width: 100%;
+		border: 1px solid rgb(var(--gray-light));
+		font-size: 1rem;
+		transition: all 0.2s ease;
+		box-sizing: border-box; 
+	}
+
+	#search-input:focus {
+		outline: none;
+		border-color: var(--accent);
+		box-shadow: 0 0 0 3px rgba(35, 55, 255, 0.1);
+	}
+
+	.search-results {
+		position: absolute;
+		top: calc(100% + 0.5rem);
+		left: 0;
+		right: 0;
+		background: white;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(var(--gray), 0.15);
+		max-height: 400px;
+		overflow-y: auto;
+		z-index: 1000;
+	}
+
+	.search-results.hidden {
+		display: none;
+	}
+
+	.results-list {
+		padding: 0.5rem;
+	}
+
+	.result-item {
+		display: block;
+		padding: 0.75rem 1rem;
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+		border-radius: 8px;
+		transition: background 0.2s;
+		margin-bottom: 0.25rem;
+	}
+
+	.result-item:hover {
+		background: rgb(var(--gray-light));
+	}
+
+	.result-title {
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+		color: rgb(var(--black));
+	}
+
+	.result-description {
+		font-size: 0.85rem;
+		color: rgb(var(--gray));
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.no-results {
+		padding: 1rem;
+		text-align: center;
+		color: rgb(var(--gray));
+	}
+
+	.view-all {
+		padding: 0.75rem 1rem;
+		text-align: center;
+		font-size: 0.85rem;
+		color: var(--accent);
+		border-top: 1px solid rgb(var(--gray-light));
+		margin-top: 0.25rem;
+	}
+
+	:global(mark) {
+		background-color: rgba(35, 55, 255, 0.2);
+		color: inherit;
+		padding: 0 0.2em;
+		border-radius: 3px;
+	}
+
+	/* Scrollbar styling */
+	.search-results::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	.search-results::-webkit-scrollbar-track {
+		background: rgb(var(--gray-light));
+		border-radius: 12px;
+	}
+
+	.search-results::-webkit-scrollbar-thumb {
+		background: rgb(var(--gray));
+		border-radius: 12px;
+	}
+
+	.search-results::-webkit-scrollbar-thumb:hover {
+		background: rgb(var(--gray-dark));
+	}
+</style>

@@ -1,44 +1,49 @@
 ---
-import RootLayout from '../layouts/RootLayout.astro';
-import { BLOG_INFO } from '../consts';
+import { type InferGetStaticPropsType, type GetStaticPaths, type GetStaticPathsOptions } from 'astro';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../components/FormattedDate.astro';
+import RootLayout from '../../layouts/RootLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Pagination from '../../components/Pagination.astro';
+import { BLOG_INFO } from '../../consts';
 
-const allPosts = await getCollection('blog');
-const recentPosts = allPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 5);
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const posts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	);
+	return paginate(posts, { pageSize: 5 });
+}
+
+const { page } = Astro.props;
 ---
 
 <RootLayout title={BLOG_INFO.title} description={BLOG_INFO.description}>
-	<h3>Recent Posts</h3>
 	<div class="posts-grid">
-		{recentPosts.map((post) => (
-			<article class="post-card">
-				<a href={`/henry-blog/blog/${post.id}`}>
-					<h2 class="post-title">{post.data.title}</h2>
-					<p class="post-description">{post.data.description}</p>
-					<div class="post-meta">
-						<FormattedDate date={post.data.pubDate} />
-						{post.data.categories && (
-							<div class="categories">
-								{post.data.categories.map((category) => (
-									<span class="category">{category}</span>
-								))}
-							</div>
-						)}
-					</div>
-				</a>
-			</article>
-		))}
+		{
+			page.data.map((post) => (
+				<article class="post-card">
+					<a href={`/henry-blog/blog/${post.id}`}>
+						<h2 class="post-title">{post.data.title}</h2>
+						<p class="post-description">{post.data.description}</p>
+						<div class="post-meta">
+							<FormattedDate date={post.data.pubDate} />
+							{post.data.categories && (
+								<div class="categories">
+									{post.data.categories.map((category) => (
+										<span class="category">{category}</span>
+									))}
+								</div>
+							)}
+						</div>
+					</a>
+				</article>
+			))
+		}
 	</div>
+	
+	<Pagination page={page} />
 </RootLayout>
 
 <style>
-	h3 {
-		margin-bottom: 1.5rem;
-	}
-
 	.posts-grid {
 		display: grid;
 		gap: 1.5rem;
