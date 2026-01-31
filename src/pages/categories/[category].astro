@@ -13,23 +13,29 @@ export async function getStaticPaths() {
 			post.data.categories?.includes(category)
 		).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+		const categorySlug = category
+			.toLowerCase()
+			.replace(/\s+/g, '-')
+			.replace(/\//g, '-')
+			.replace(/[^a-z0-9-]/g, '');
+
 		return {
-			params: { category },
-			props: { posts: filteredPosts },
+			params: { category: categorySlug },
+			props: { posts: filteredPosts, originalCategory: category },
 		};
 	});
 }
 
 const { category } = Astro.params;
-const { posts } = Astro.props;
+const { posts, originalCategory } = Astro.props;
 ---
 
 <RootLayout 
-	title={`${category} - ${BLOG_INFO.title}`} 
-	description={`Posts categorized with ${category}`}
+	title={`${originalCategory} - ${BLOG_INFO.title}`} 
+	description={`Posts categorized with ${originalCategory}`}
 >
 	<div class="category-page">
-		<h3>{category}</h3>
+		<h3>{originalCategory}</h3>
 		<p class="count">{posts.length} {posts.length === 1 ? 'post' : 'posts'} found</p>
 		
 		<div class="posts-grid">
@@ -58,4 +64,3 @@ const { posts } = Astro.props;
 		gap: 1.5rem;
 	}
 </style>
-
