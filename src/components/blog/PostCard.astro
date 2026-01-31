@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
+import FormattedDate from '../FormattedDate.astro';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
@@ -86,7 +86,7 @@ const { post } = Astro.props;
 		font-size: 0.85rem;
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 720px) {
 		.post-card {
 			padding: 1rem;
 		}

@@ -2,7 +2,7 @@
 import RootLayout from '../layouts/RootLayout.astro';
 import { BLOG_INFO } from '../consts';
 import { getCollection } from 'astro:content';
-import PostCard from '../components/PostCard.astro';
+import PostCard from '../components/blog/PostCard.astro';
 
 const allPosts = await getCollection('blog');
 const recentPosts = allPosts

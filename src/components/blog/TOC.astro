@@ -1,0 +1,100 @@
+---
+---
+<aside class="toc">
+	<nav>
+		<p class="toc-title">On This Post</p>
+		<ul id="toc-list"></ul>
+	</nav>
+</aside>
+
+<script>
+function generateTOC() {
+	const headings = document.querySelectorAll('.prose h4');
+	const tocList = document.getElementById('toc-list');
+	
+	if (!tocList || headings.length === 0) return;
+	
+	tocList.innerHTML = '';
+	
+	headings.forEach((heading, index) => {
+		const id = heading.id || `heading-${index}`;
+		heading.id = id;
+		
+		const li = document.createElement('li');
+		li.className = `toc`;
+		
+		const a = document.createElement('a');
+		a.href = `#${id}`;
+		a.textContent = heading.textContent || '';
+		a.addEventListener('click', (e) => {
+			e.preventDefault();
+			const headingPosition = heading.getBoundingClientRect().top + window.scrollY - 100;
+			window.scrollTo({ 
+				top: headingPosition, 
+				behavior: 'smooth' 
+			});
+		});
+		
+		li.appendChild(a);
+		tocList.appendChild(li);
+	});
+}
+	
+	document.addEventListener('DOMContentLoaded', generateTOC);
+	// For view transitions/Astro's navigation
+	document.addEventListener('astro:after-swap', generateTOC);
+</script>
+
+<style>
+	.toc {
+		width: 100%;
+		max-width: 250px;
+		position: sticky;
+		top: 6rem;
+		height: fit-content;
+	}
+
+	.toc-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--foreground);
+		margin-bottom: 1rem;
+	}
+	
+	.toc nav {
+		padding: 1.5rem;
+		border-radius: 8px;
+	}
+	
+	.toc ul {
+		list-style: none;
+		padding-left: 0.5rem;
+		border-left: 3px solid var(--primary);
+		border-radius: 8px;
+		font-size: 0.9rem;
+		line-height: 2.5rem;
+	}
+
+	.toc :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.toc :global(a) {
+		color: var(--muted-foreground);
+		display: block;
+		transition: color 0.2s;
+	}
+
+	.toc :global(a:hover) {
+		color: var(--primary);
+	}
+	
+	@media (max-width: 720px) {
+		:global([slot="right-sidebar"]) {
+			display: none;
+		}
+		.toc {
+			display: none;
+		}
+	}
+</style>

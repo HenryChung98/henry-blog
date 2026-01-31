@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import RootLayout from './RootLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import TOC from '../components/blog/TOC.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
@@ -31,16 +32,15 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 			<slot />
 		</div>
 	</article>
+	
+	<TOC slot="right-sidebar" />
 </RootLayout>
-
 <style>
 	article {
 		width: 100%;
 	}
 	
 	.prose {
-		max-width: 1020px;
-		margin: 0 auto;
 		color: var(--muted-foreground);
 	}
 	

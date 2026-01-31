@@ -19,9 +19,8 @@ export default defineConfig({
           titleClass: "flex items-center gap-1",
         }),
       ],
-     themes: ['github-dark'],
+      themes: ['dark-plus'],
     }),
-    
     mdx(),
     sitemap(),
   ],

@@ -1,5 +1,5 @@
 ---
-import { BLOG_INFO } from '../consts';
+import { BLOG_INFO } from '../../consts';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
@@ -59,7 +59,7 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
     color: var(--primary);
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 720px) {
     .sidebar {
       position: fixed;
       top: 0;

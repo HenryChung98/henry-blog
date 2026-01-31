@@ -2,8 +2,8 @@
 import { type InferGetStaticPropsType, type GetStaticPaths, type GetStaticPathsOptions } from 'astro';
 import { getCollection } from 'astro:content';
 import RootLayout from '../../layouts/RootLayout.astro';
-import Pagination from '../../components/Pagination.astro';
-import PostCard from '../../components/PostCard.astro';
+import Pagination from '../../components/blog/Pagination.astro';
+import PostCard from '../../components/blog/PostCard.astro';
 import { BLOG_INFO } from '../../consts';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {

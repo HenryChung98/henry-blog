@@ -1,12 +1,11 @@
 ---
-title: 'Deploy to Github Pages (Astro)'
-description: 'How to deploy a static site to Github Pages(Astro)'
-pubDate: 'Jan 30 2026'
-categories: ['Github']
+title: "Deploy to Github Pages (Astro)"
+description: "How to deploy a static site to Github Pages"
+pubDate: "Jan 30 2026"
+categories: ["Git / Github", "Web Development"]
 ---
 
 #### 1. Create .yml file
-
 
 ```text title="Required structure" no-icon
 repository-root/
@@ -14,7 +13,6 @@ repository-root/
     └── workflows/
         └── deploy.yml  # or any-name.yml
 ```
-
 
 ```yml title="static.yml"
 # Simple workflow for deploying static content to GitHub Pages
@@ -48,7 +46,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Install dependencies
         run: npm ci
       - name: Build
@@ -58,12 +56,12 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist'
+          path: "dist"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
 ```
+
 This `.yml` file can be used for any project that requires a build step. Adjust the `path` parameter based on your framework's output directory:
 
 - **Astro/Vite**: `path: 'dist'` (default)
@@ -72,31 +70,18 @@ This `.yml` file can be used for any project that requires a build step. Adjust 
 
 ---
 
-
 #### 2. Configure astro.config.mjs
-```astro title="astro.config.mjs"
+
+```js title="astro.config.mjs"
 export default defineConfig({
-  site: 'https://yourusername.github.io',
-  base: '/repository-name', // Required if repo name ≠ yourusername.github.io
+  site: "https://yourusername.github.io",
+  base: "/repository-name", // Required if repo name ≠ yourusername.github.io
 });
 ```
 
 ---
 
-#### 3. Enable GitHub Pages
-
-Navigate to your repository settings:
-- Go to **Settings** tab
-- Click **Pages** in the left sidebar
-- Under **Build and deployment**:
-  - Source: Select **GitHub Actions** (not "Deploy from a branch")
-- Click **Save**
-
-![GitHub Pages Settings - Select GitHub Actions as source]
-
----
-
-#### 4. Verify package.json
+#### 3. Verify package.json
 
 ```json title="package.json" icon="json"
 {
@@ -108,7 +93,7 @@ Navigate to your repository settings:
 
 ---
 
-#### 5. Update Asset Paths
+#### 4. Update Asset Paths
 
 All internal links must include the base path:
 
@@ -122,13 +107,24 @@ All internal links must include the base path:
 
 ---
 
+#### 5. Enable GitHub Pages
+
+Navigate to your repository settings:
+
+- Go to **Settings** tab
+- Click **Pages** in the left sidebar
+- Under **Build and deployment**:
+  - Source: Select **GitHub Actions** (not "Deploy from a branch")
+- Click **Save**
+
+---
 
 #### 6. Deploy
 
 Push to `main` branch:
 
 ```bash icon="powershell"
-git push origin main
+git push -u origin main
 ```
 
 Workflow will run automatically. Check **Actions** tab to monitor deployment.
