@@ -79,7 +79,7 @@
 
 		function highlightText(text: string, query: string): string {
 			const regex = new RegExp(`(${query})`, 'gi');
-			return text.replace(regex, '<mark>$1</mark>');
+			return text.replace(regex, '<span class="search-highlight">$1</span>');
 		}
 
 		function hideResults() {
@@ -248,10 +248,9 @@
 		margin-top: 0.25rem;
 	}
 
-	:global(mark) {
-		background-color: rgba(35, 55, 255, 0.2);
+	:global(.search-highlight) {
+		background-color: rgba(94, 165, 0, 0.5);
 		color: inherit;
-		padding: 0 0.2em;
 		border-radius: 3px;
 	}
 

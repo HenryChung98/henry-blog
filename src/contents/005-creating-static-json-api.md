@@ -15,7 +15,7 @@ export const GET: APIRoute = async () => {
   const allPosts = await getCollection("blog");
   const recentPosts = allPosts
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .slice(0, 4)
+    .slice(0, 6)
     .map((post) => ({
       id: post.id,
       title: post.data.title,
@@ -41,7 +41,7 @@ export async function GET() {
   const allPosts = await getAllPosts();
   const recentPosts = allPosts
     .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-    .slice(0, 4)
+    .slice(0, 6)
     .map((post) => ({
       id: post.id,
       title: post.title,
@@ -69,7 +69,7 @@ app.get("/api/recent-posts", async (req, res) => {
   const allPosts = await getPosts();
   const recentPosts = allPosts
     .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-    .slice(0, 4)
+    .slice(0, 6)
     .map((post) => ({
       id: post.id,
       title: post.title,
@@ -86,6 +86,8 @@ app.get("/api/recent-posts", async (req, res) => {
 app.listen(3000);
 ```
 
+---
+
 #### Consuming the API
 
 ```ts title="react-example.ts"
@@ -99,6 +101,8 @@ export default function Blog() {
   }, []);
 ```
 
+---
+
 #### How it works
 
 1. **API Route** - Framework-specific endpoint that handles HTTP GET requests
@@ -108,6 +112,8 @@ export default function Blog() {
 5. **Response** - Return JSON with appropriate headers (Content-Type, CORS)
 6. **Static generation** - Some frameworks can pre-render this at build time for performance
 
+---
+
 #### Why use static JSON APIs?
 
 - **Performance** - Pre-generated at build time, served instantly via CDN
@@ -115,11 +121,15 @@ export default function Blog() {
 - **Reliability** - No database dependency or server failures
 - **Simplicity** - No backend infrastructure needed for read-only data
 
+---
+
 #### Tradeoffs
 
 - **Stale data** - Requires rebuild to update (not suitable for real-time data)
 - **Build time** - Large datasets can slow down builds
 - **Limited functionality** - No dynamic filtering, authentication, or POST requests
+
+---
 
 #### When to use
 

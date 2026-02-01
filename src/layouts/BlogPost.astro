@@ -6,24 +6,16 @@ import TOC from '../components/blog/TOC.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate } = Astro.props;
+const { title, description, pubDate } = Astro.props;
 ---
 
 <RootLayout title={title} description={description}>
 	<article>
 		<div class="prose">
 			<div class="title">
-				<div class="date">
-					<h1>{title}</h1>
-					<FormattedDate date={pubDate} />
-					{
-						updatedDate && (
-							<div class="last-updated-on">
-								Last updated on <FormattedDate date={updatedDate} />
-							</div>
-						)
-					}
-				</div>
+				<FormattedDate date={pubDate} />
+				<h1>{title}</h1>
+				<p>{description}</p>
 			</div>
 			<div class="disclaimer">
 				<strong>Note:</strong> This post is a personal learning note and may contain inaccuracies or misunderstandings.
@@ -32,7 +24,6 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 			<slot />
 		</div>
 	</article>
-	
 	<TOC slot="right-sidebar" />
 </RootLayout>
 <style>
@@ -43,22 +34,19 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 	.prose {
 		color: var(--muted-foreground);
 	}
+	.prose :global(a) {
+		color: var(--primary);
+		text-decoration: none;
+	}
+	.prose :global(a:hover) {
+		text-decoration: underline;
+	}
 	
 	.title {
 		margin-bottom: 1em;
 		padding: 1em 0;
 		line-height: 1;
-	}
-	
-	.date {
-		margin-bottom: 0.5em;
-		text-align: left;
 		font-size: 1rem;
-		color: var(--muted-foreground);
-	}
-	
-	.last-updated-on {
-		font-style: italic;
 	}
 
 	.disclaimer {

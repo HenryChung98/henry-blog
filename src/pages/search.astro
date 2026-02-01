@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import RootLayout from '../layouts/RootLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import { BLOG_INFO } from '../consts';
 
 // Fetch all posts at build time
@@ -123,7 +124,7 @@ const searchData = sortedPosts.map(post => ({
 
 	function highlightText(text, query) {
 		const regex = new RegExp(`(${query})`, 'gi');
-		return text.replace(regex, '<mark>$1</mark>');
+		return text.replace(regex, '<span class="search-highlight">$1</span>');
 	}
 
 	// 페이지 로드 시 실행
@@ -248,14 +249,6 @@ const searchData = sortedPosts.map(post => ({
 		padding: 0.25rem 0.75rem;
 		border-radius: 12px;
 		font-size: 0.85rem;
-	}
-
-	/* Search highlights style */
-	:global(mark) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent);
-		color: inherit;
-		padding: 0 0.2em;
-		border-radius: 3px;
 	}
 
 	@media (max-width: 720px) {

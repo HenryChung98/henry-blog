@@ -5,7 +5,7 @@ export const GET: APIRoute = async () => {
   const allPosts = await getCollection('blog');
   const recentPosts = allPosts
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .slice(0, 4)
+    .slice(0, 6)
     .map(post => ({
       id: post.id,
       title: post.data.title,
