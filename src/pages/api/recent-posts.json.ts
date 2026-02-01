@@ -12,7 +12,7 @@ export const GET: APIRoute = async () => {
       description: post.data.description,
       pubDate: post.data.pubDate,
       categories: post.data.categories,
-      url: `/henry-blog/posts/${post.id}/`
+      url: `/henry-blog/posts/${post.id}`
     }));
 
   return new Response(JSON.stringify(recentPosts), {
