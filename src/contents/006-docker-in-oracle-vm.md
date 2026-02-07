@@ -5,7 +5,7 @@ pubDate: "Feb 1 2026"
 categories: ["Docker", "DevOps"]
 ---
 
-#### Docker setup
+#### Local testing
 
 ```bash title="Installing Docker"
 choco install docker-desktop
@@ -22,18 +22,18 @@ docker logs gotenberg # check the logs
 curl http://localhost:3000/health # api health check
 ```
 
-Once all is set up, you can stop the container and remove it
+Once everything is set up, stop the container and remove it
 
 ```bash
 docker stop gotenberg # stop the container
 docker rm -f gotenberg # remove the container
 ```
 
-
+---
 
 #### Oracle VM setup
 
-###### Create reserved IP
+<!-- ###### Create reserved IP
 
 Navigate: **Networking > IP Management > Reserved Public IPs**
 
@@ -41,7 +41,7 @@ Navigate: **Networking > IP Management > Reserved Public IPs**
 - **Name**: `gotenberg-ip`
 - **Compartment**: (your compartment)
 - Click **"Reserve Public IP Address"**
-- Copy the IP address
+- Copy the IP address -->
 
 ###### Create instance
 
@@ -53,9 +53,9 @@ Navigate: **Networking > IP Management > Reserved Public IPs**
     - OCPU: 2, Memory: 12GB (free tier)
 - **Networking**:
     - Use default VCN or create new
-    - **Public IPv4 address**: 
-        - Select **"Use a reserved public IP"**
-        - Choose `gotenberg-ip` from dropdown
+    - **Public IPv4 address**: Yes
+        <!-- - Select **"Use a reserved public IP"** -->
+        <!-- - Choose `gotenberg-ip` from dropdown -->
 - **SSH Keys**:
     - click `Generate SSH key pair`
     - Download private key (`.key` file)
@@ -78,6 +78,8 @@ Navigate: **Networking > Virtual Cloud Networks > [Your VCN] > Security Lists > 
 
 **Rule 2 - SSH:**
 - Destination Port Range: 22
+
+---
 
 #### Run Gotenberg in Oracle VM
 

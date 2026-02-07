@@ -3,13 +3,13 @@ export const BLOG_INFO = {
   description: "Welcome to my blog!",
   author: {
     name: "Henry Chung",
-    avatar: "/henry-blog/logo.webp",
+    avatar: "/blog/logo.webp",
     bio: "Software Engineer",
     email: "henrychung.dev@gmail.com",
     location: "Burnaby, Canada",
     github: "https://github.com/HenryChung98",
     instagram: "https://www.instagram.com/_henrychung",
     linkedin: "https://www.linkedin.com/in/henry-chung-cs",
-    portfolio: "https://henrychung98.github.io/henry-portfolio",
+    portfolio: "https://henrychung98.github.io/portfolio",
   },
 };

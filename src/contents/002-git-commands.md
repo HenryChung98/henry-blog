@@ -2,7 +2,7 @@
 title: "Git Commands Reference"
 description: "Comprehensive Git command cheat sheet and workflow guide"
 pubDate: "Jan 31 2026"
-categories: ["Git / Github", "Commands"]
+categories: ["Git / Github"]
 ---
 
 #### Daily Commands
@@ -19,12 +19,14 @@ categories: ["Git / Github", "Commands"]
 
 #### Branching
 
-| Command                  | Description                     |
-| ------------------------ | ------------------------------- |
-| `git switch -c [branch]` | Create and switch to new branch |
-| `git switch [branch]`    | Switch to existing branch       |
-| `git merge [branch]`     | Merge branch into current       |
-| `git branch -d [branch]` | Delete merged branch            |
+| Command                       | Description                                      |
+| ----------------------------- | ------------------------------------------------ |
+| `git switch -c [branch]`      | Create and switch to new branch                  |
+| `git switch [branch]`         | Switch to existing branch                        |
+| `git merge [branch]`          | Merge branch into current                        |
+| `git merge --squash [branch]` | Merge branch as a single commit                  |
+| `git rebase [branch]`         | Reapply commits on top of branch, linear history |
+| `git branch -d [branch]`      | Delete merged branch                             |
 
 ---
 

@@ -2,7 +2,7 @@
 title: "Unix/Linux Commands Reference"
 description: "Essential Unix/Linux commands for daily terminal work"
 pubDate: "Jan 31 2026"
-categories: ["Commands"]
+categories: ["DevOps"]
 ---
 
 #### Terminal Shortcuts

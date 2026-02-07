@@ -15,20 +15,20 @@ const { title, description } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/henry-blog/favicon.svg" />
-<link rel="icon" href="/henry-blog/favicon.ico" />
-<link rel="sitemap" href="/henry-blog/sitemap-index.xml" />
+<link rel="icon" type="image/svg+xml" href="/blog/favicon.svg" />
+<link rel="icon" href="/blog/favicon.ico" />
+<link rel="sitemap" href="/blog/sitemap-index.xml" />
 <link
 	rel="alternate"
 	type="application/rss+xml"
 	title={BLOG_INFO.title}
-	href={new URL('/henry-blog/rss.xml', Astro.site)}
+	href={new URL('/blog/rss.xml', Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font preloads -->
-<link rel="preload" href="/henry-blog/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/henry-blog/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/blog/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/blog/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

@@ -9,7 +9,7 @@ import { pluginFileIcons } from "@xt0rted/expressive-code-file-icons";
 // https://astro.build/config
 export default defineConfig({
   site: "https://henrychung98.github.io",
-  base: "/henry-blog",
+  base: "/blog",
   integrations: [
     expressiveCode({
       plugins: [

@@ -61,7 +61,7 @@
 			const hasMore = results.length > 6;
 
 			resultsContainer.innerHTML = displayResults.map(post => `
-				<a href="/henry-blog/posts/${post.id}" class="result-item">
+				<a href="/blog/posts/${post.id}" class="result-item">
 					<div class="result-title">${highlightText(post.title, query)}</div>
 					</a>
 					`).join('');
@@ -120,7 +120,7 @@
 				e.preventDefault();
 				const query = searchInput.value;
 				if (query && query.trim()) {
-					window.location.href = `/henry-blog/search?q=${encodeURIComponent(query.trim())}`;
+					window.location.href = `/blog/search?q=${encodeURIComponent(query.trim())}`;
 				}
 			}
 		});

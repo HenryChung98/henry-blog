@@ -7,18 +7,18 @@ const categories = [...new Set(allPosts.flatMap(post => post.data.categories || 
 ---
 
 <aside class="sidebar">
-    <a href="/henry-blog/about" class="avatar">
+    <a href="/blog/about" class="avatar">
         <img src={BLOG_INFO.author.avatar} alt="Avatar"/>
     </a>
     <div class="empty"></div>
   <nav>
     <ul class="categories">
         <li>
-            <a href="/henry-blog/posts">All Posts</a>
+            <a href="/blog/posts">All Posts</a>
         </li>   
       {categories.map((category) => (
         <li>
-          <a href={`/henry-blog/categories/${category}`}>{category}</a>
+          <a href={`/blog/categories/${category}`}>{category}</a>
         </li>
       ))}
     </ul>

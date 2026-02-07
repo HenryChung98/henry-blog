@@ -1,7 +1,7 @@
 ## Henry Blog
 
 ## Live
-[Henry Blog](https://henrychung98.github.io/henry-blog/)
+[Henry Blog](https://henrychung98.github.io/blog/)
 
 
 ## Tech Stack
