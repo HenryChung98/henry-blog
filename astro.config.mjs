@@ -19,7 +19,7 @@ export default defineConfig({
           titleClass: "flex items-center gap-1",
         }),
       ],
-      themes: ['dark-plus'],
+      themes: ["dark-plus"],
     }),
     mdx(),
     sitemap(),
